@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>BBS</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="/static/img/UIBE.ico" type="image/x-icon" />
+    {% block css_js %}{% endblock %}
+</head>
+<body>
+    <div class="navbar_container">
+    <div class="navbar" style="padding: 15px">
+        <input type="checkbox" />
+        <span style="left: 20px"></span>
+        <span style="left: 20px"></span>
+        <ul>
+            <li><a href="{% url 'index'%}">首页</a></li>
+            <li><a href="{% url 'tiezi_list'%}">帖子</a></li>
+            {% if not user.is_authenticated %}
+                <li>
+                    <a href="{% url 'user_login' %}?from={{request.get_full_path}}">登录
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'user_register' %}?from={{request.get_full_path}}">注册
+                    </a>
+                </li>
+            {% else %}
+                <li >
+                    <a href="{% url 'user_info' %}">个人
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'user_logout' %}?from={{request.get_full_path}}">溜了
+                    </a>
+                </li>
+                {% if user.is_staff %}
+                <li><a href="{% url 'admin:index' %}">后台</a></li>
+                {% endif %}
+            {% endif %}
+            
+        </ul>
+    </div>
+    </div>
+         <!-- <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>   -->  
+
+    {% block content %}{% endblock %}
+    {% block script %}{% endblock %}
+    
+    
+    
+</body>
+</html>

@@ -1,0 +1,14 @@
+#bufenlei{
+    background: #123456;
+    transition: 0.4s ease;
+}
+#bufenlei:hover{
+    background: #f44336;
+}
+#sb>.numb,#left,#right{
+    color: #123456;
+}
+#left:hover,#right:hover,#sb>.numb:hover,#sb>.numb:hover{
+    color: #fff;
+    background: #123456;
+}

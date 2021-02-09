@@ -1,0 +1,9 @@
+#sb>.numb,#left,#right{
+    color: #123456;
+}
+#left:hover,#right:hover,#sb>.numb:hover,#sb>.numb:hover{
+    color: #fff;
+    background: #123456;
+}
+
+

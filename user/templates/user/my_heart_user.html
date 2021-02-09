@@ -1,0 +1,94 @@
+{% load feedback_tags %}
+{% load readnum_tags %}
+{% load comment_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BBS</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />   
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <link rel="shortcut icon" href="/static/img/UIBE.ico" type="image/x-icon" />
+</head>
+<body>
+    <div class="container" style="padding-top: 5vh;">
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-sx-10 col-md-offset-1 col-sm-offset-1 col-sx-offset-1">  
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th><button class="btn btn-primary" onclick="window.location.href='{{return_back_url}}'">返回</button></th>
+                                <th>用户</th>
+                                <th>查看ta的帖子</th>
+                                <th>私信</th>
+                                <th>取关</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for heart_user in heart_user_list %}
+                            <tr id="{{heart_user.id}}">
+                                <th class="scope">#</th>
+                                <td>
+                                    {% if heart_user.content_object.custome_user.nickname %}
+                                        {{heart_user.content_object.custom_user.nickname }}
+                                    {% else %}
+                                        用户:{{heart_user.content_object.username }}
+                                    {% endif %}</td>
+                                <td><a href="{% url 'get_ta_tiezi_all'  heart_user.content_object.id %}">查看</a></td>
+                                <td id="test">私信</td>
+                                <td><a href="{% url 'cancel_heart' heart_user.content_object.id %}?from={{request.get_full_path}}">取关</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <th class="scope">#</th>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- ta的帖子 -->
+        <div class="modal fade" id="ta_tiezi" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="container" style="padding-top: 5vh;">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-sx-12">
+                                <ul class="list-group" id="ta_tiezi_wrap">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%else%}
+        <div class="row">
+            <div class="col-xs-9 col-sm-9 col-md-9">
+                <h1>你怎么进来的？你登录了吗？滚！</h1>
+                <img src="/static/img/fuckoff.jpg" alt="">
+                    <script type="text/javascript">
+                        function gun(){
+                            window.location.href = '/';
+                        }
+                        setTimeout("gun()",2000 );
+                    </script>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    </body> 
+</html>

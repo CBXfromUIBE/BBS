@@ -1,0 +1,192 @@
+{% extends 'Universal.html' %}
+
+{% block css_js %}
+    <link rel="stylesheet" href="/static/css/register.css">
+    <!-- <link rel="stylesheet" href="/static/css/register-font.css"> -->
+    <style type="text/css">
+        .send_code{
+            width: 100%;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center;     /* 垂直居中 */
+            margin-bottom: 5px;
+        }
+        .send_code .ver_code{
+            flex: 1;
+            height: 40px;
+            margin: -7px 0;
+            background-color: #EEEEEE;
+            border: none;
+            font-size: 14px;
+            padding: 0 0 0 20px;
+            margin-right: 10px;
+        }
+        .send_code .send_code_btn{
+            flex: 1;
+            height: 40px;
+            padding: 0 10px;
+            margin: 0;
+        }
+        #tip{
+            position: absolute;
+            bottom: -5%;
+        }
+        #tip2,#tip3{
+            position: absolute;
+            bottom: -6%;
+        }
+        .result{
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="con" id="container">
+        {% if not user.is_authenticated %}
+        <!-- 非官邮注册页面 -->
+        <div class="form-container sign-up-container">
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <h1 class="reg_h1">非官邮注册</h1>
+                <!-- 公共组件 -->
+                <!-- <div class="social-container">
+                    <a href="#"><i class="fab fa-qq"></i></a>
+                    <a href="#"><i class="fab fa-weixin"></i></a>
+                    <a href="#"><i class="fab fa-weibo"></i></a>
+                </div> -->
+                {% for i in reg_form %}
+                    {{i}}
+                <p class="text-danger">{{ field.errors.as_text }}</p>
+                {% endfor %}
+                <input type="text" id="email2" placeholder="请输入邮箱" class="inputtext" style="margin-bottom: 10px" name="email">
+                <p id="tip3" class="text-danger"></p>
+                <span  class="text-danger" style="display: block;">{{reg_form.non_field_errors }}
+                </span>
+                <input type="submit" value="注册" class="reg">
+            </form>
+        </div>
+
+        <!-- 官邮注册页面 -->
+        <div class="form-container sign-in-container">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <h1 class="reg_h1">官邮注册</h1>
+                
+                <!-- 公共组件 -->
+                <!-- <div class="social-container">
+                    <a href="#"><i class="fab fa-qq"></i></a>
+                    <a href="#"><i class="fab fa-weixin"></i></a>
+                    <a href="#"><i class="fab fa-weibo"></i></a>
+                </div> -->
+                {% for i in reg_form %}
+                    {{i}}
+                <p class="text-danger">{{ i.errors.as_text }}</p>
+                {% endfor %}
+                <input type="text" id="email1" placeholder="请输入邮箱,格式xxx@uibe.edu.cn" class="inputtext" style="margin-bottom: 10px" name="email">
+
+                <div class="send_code">
+                    <input type="text" id="ver_code" placeholder="请输入验证码"   name="ver_code" class="ver_code">
+                    <button type="button" id="send_code" class="btn btn-primary" style="height: 40px;padding: 0 10px;margin: 0;">发送验证码到邮箱</button>
+                </div>
+                <span  class="text-danger" style="display: block;">{{reg_form.non_field_errors }}
+                </span>
+                <input type="submit" value="注册" class="reg">
+                <p id="tip" class="text-danger"></p>
+                {% if error_message %}
+                <p id="tip2" class="text-danger">{{error_message}}</p>
+                {% endif %}
+
+            </form>
+        </div>
+
+        <!-- 覆盖容器 -->
+        <div class="overlay-container">
+            <div class="overlay">
+
+                <!-- 覆盖左边 -->
+                <div class="overlay-penal overlay-left-container">
+                    <h1>注册提示</h1>
+                    <p>
+                        非官邮注册者，请联系管理员进行身份审核，满足条件后方可
+                        正常使用网站功能。请提供能证明您是本校师生、教职工等身份的证件。
+                    </p>
+                    <ul style="text-decoration: none;">
+                        <li>管理员邮箱:201701056@uibe.edu.cn</li>
+                        <li>管理员微信:CBX_2323</li>
+                    </ul>
+                    <button class="ghost" id="signIn">我有官邮</button>
+                </div>
+
+                <!-- 覆盖右边 -->
+                <div class="overlay-penal overlay-right-container">
+                    <h1>注册提示</h1>
+                    <p>
+                        注册完成后，即可登录网站，正常使用网站功能  
+                    </p>
+                    <button class="ghost" id="signUp">没有官邮？</button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="row" style="text-align: center;">
+                <h1>你登录过了</h1>
+                <script type="text/javascript">
+                    function gun(){
+                        window.location.href = '/';
+                    }
+                    setTimeout("gun()",1000 );
+                </script>
+            </div>
+        {% endif %}
+    </div>
+    <script src="/static/js/register.js"></script>
+    <script type="text/javascript">
+        
+        $("#send_code").click(function(){
+            var email = $("#email1").val();
+            console.log(email)
+            if(email==""){
+                $("#tip").text('邮箱不能为空')
+                return false
+            }
+            if(email.indexOf('@') == -1) {
+                $("#tip").text('邮箱格式不对头')
+                return false
+            }
+            $.ajax({
+                url: "{% url 'send_verification_code' %}",
+                type: "GET",
+                data: {
+                    'email': email,
+                    'send_for_what': 'send_for_register'
+                },
+                cache: false,
+                success: function(data){
+                    if(data['status']=='ERROR'){
+                        alert(data['message']);    
+                    }                    
+                }
+            });
+            // 把按钮变灰
+            $(this).addClass('disabled');
+            $(this).attr('disabled', true);
+            $("#email1").addClass('disabled');
+            $("#email1").attr('disabled', true);
+            var time = 60;
+            $(this).text(time + 's');
+            var interval = setInterval(() => {
+                if(time <= 0){
+                    clearInterval(interval);
+                    $(this).removeClass('disabled');
+                    $(this).attr('disabled', false);
+                    $(this).text('发送验证码');
+                    return false;
+                }
+
+                time --;
+                $(this).text(time + 's');
+            }, 1000);
+        });
+    </script>
+{% endblock %}

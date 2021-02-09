@@ -1,0 +1,88 @@
+{% load feedback_tags %}
+{% load readnum_tags %}
+{% load comment_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BBS</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />   
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <link rel="shortcut icon" href="/static/img/UIBE.ico" type="image/x-icon" />
+</head>
+<body>
+
+
+    <div class="container" style="padding-top: 5vh;">
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-sx-10 col-md-offset-1 col-sm-offset-1 col-sx-offset-1">
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th><button class="btn btn-primary" onclick="window.location.href='{{return_back_url}}'">返回</button></th>
+                                <th>标题</th>
+                                <th>原文</th>
+                                <th>发帖时间</th>
+                                <th>总阅读数</th>
+                                <th>赞</th>
+                                <th>淦</th>
+                                <th>评论数</th>
+                                <th>删帖</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tiezi in tiezi_of_user %}
+                            <tr id="{{tiezi.id}}">
+                                <th class="scope">#</th>
+                                <td>{{tiezi.title}}</td>
+                                <td><a href="{% url 'tiezi_detail' tiezi.id%}">去帖子页</a></td>
+                                <td>{{tiezi.created_time}}</td>
+                                <td>{% get_read_count tiezi %}</td>
+                                <td>{% get_like_count tiezi %}</td>
+                                <td>{% get_dislike_count tiezi %}</td>
+                                <td>{% get_comment_count tiezi %}</td>
+                                <td><a href="{% url 'del_tiezi' tiezi.id %}?from={{request.get_full_path}}">删除</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <th class="scope">#</th>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>#</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {%else%}
+        <div class="row">
+            <div class="col-xs-9 col-sm-9 col-md-9">
+                <h1>你怎么进来的？你登录了吗？滚！</h1>
+                <img src="/static/img/fuckoff.jpg" alt="">
+                    <script type="text/javascript">
+                        function gun(){
+                            window.location.href = '/';
+                        }
+                        setTimeout("gun()",2000 );
+                    </script>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+   </body> 
+</html>

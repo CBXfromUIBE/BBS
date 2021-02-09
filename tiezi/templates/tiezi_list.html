@@ -1,0 +1,118 @@
+{% extends 'Universal.html' %}
+
+{% block css_js %}
+    <link rel="stylesheet" href="/static/css/tiezi_list.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="margin-top: 3%">
+        <div class="col-xs-8 col-sm-8 col-md-8 ">
+
+            <!-- 帖子列表 -->
+            <div class="list-group">
+                {% for i in tiezi_all%}
+                <a href="{% url 'tiezi_detail' i.id %}" class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        {{i.title}}
+                        {% if i.get_read_num < 100 %}
+                        <span style="float:right; color: grey">{{i.get_read_num}}次阅读</span>
+                        {% else %}
+                            {% if i.get_read_num < 1000 %}
+                                <span style="float:right; color: green">{{i.read_num}}次阅读</span>
+                            {% else %}
+                                {% if i.get_read_num < 5000 %}
+                                    <span style="float:right; color: blue">{{i.get_read_num}}次阅读</span>
+                                {% else %}
+                                    <span style="float:right; color: red">{{i.get_read_num}}次阅读<span class="fire"></span></span>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </h4>
+                    <p class="list-group-item-text">{{i.content|striptags|safe|truncatechars:50|linebreaks}}</p>
+                </a>
+                {% empty %}
+                什么都没有
+                {% endfor %}
+            </div> 
+            <!-- 分页器 -->
+            <div class="pagination" style="display: flex;align-items: center;
+                justify-content: center;min-height: 15vh;background: #123456;">
+                <div id="sb" style="display: flex;list-style: none;background: #fff;
+                    padding: 8px;border-radius: 50px;">
+                    {% if page.has_previous %}
+                        <a id="left" class="btn prev" style="line-height: 45px;text-align: center;font-size: 18px;font-weight: 500;cursor: pointer;transition: all 0.3s ease;padding: 0 20px;border-radius: 25px 5px 5px 25px;text-decoration:none" href="?page={{page.previous_page_number}}">
+                            <span>
+                                <i>&laquo</i> Prev
+                            </span>
+                        </a>
+                    {% else %}
+                        <span></span>
+                    {% endif %}
+
+                    {% for i in page_range %}
+                        {% if page.number is i %}
+                        <span class="numb" style="line-height: 45px;text-align: center;font-size: 18px;font-weight: 500;cursor: default ;transition: all 0.3s ease;height: 45px;width: 45px;border-radius: 50%;margin: 0 3px;text-decoration:none;color: #fff;background: #f44336;">
+                            {{i}}
+                        </span>
+                        {%else%}
+                            {% if i == '···' %}
+                                <span class="numb" style="line-height: 45px;text-align: center;font-size: 18px;font-weight: 500;cursor: default;transition: all 0.3s ease;height: 45px;width: 45px;border-radius: 50%;margin: 0 3px;text-decoration:none;">···
+                                </span>
+                            {% else %}
+                                <a class="numb" style="line-height: 45px;text-align: center;font-size: 18px;font-weight: 500;cursor: pointer;transition: all 0.3s ease;height: 45px;width: 45px;border-radius: 50%;margin: 0 3px;text-decoration:none;" href="?page={{i}}">{{i}}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page.has_next %}
+                        <a id="right" class="btn prev" style="line-height: 45px;text-align: center;font-size: 18px;font-weight: 500;cursor: pointer;transition: all 0.3s ease;padding: 0 20px;border-radius: 5px 25px 25px 5px;text-decoration:none" href="?page={{page.next_page_number}}">
+                            <span>
+                                Next <i>&raquo</i>
+                            </span>
+                        </a>
+                    {% else %}
+                        <span></span>
+                    {% endif %}
+                    
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="col-xs-2 col-sm-2 col-md-2">
+            <!-- 侧边信息栏 -->
+            <div class="list-group">
+                <span id="bufenlei" class="list-group-item" href="{% url 'tiezi_list' %}" style="cursor: default;font-weight: 600;text-decoration: none;text-align: center;background: #eee;">
+                    <h4>看帖子，不分类</h4>
+                </span>
+                <li class="list-group-item">
+                    <p>帖子总数：{{ tiezi_all_count }}</p>
+                </li>
+                <li class="list-group-item">
+                    <p>当前帖子类别：<br>无分类</p>
+                </li>
+                <li class="list-group-item">
+                    <p></p>
+                </li>
+            </div>
+            <!-- 分类按钮 -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                分类 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    {% for i in tiezi_label_all %}
+                    <li><a href="{% url 'label_to_tiezi' i.id %}">{{i.name}}</a></li>
+                    <li role="separator" class="divider"></li>
+                    {% empty %}
+                    什么都没有
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'Universal.html' %}
+
+{% block css_js %}
+    <link rel="stylesheet" href="/static/css/login.css">
+    <!-- <script src="http://code.jquery.com/jquery-3.4.1.js"></script> -->
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if not user.is_authenticated %}
+    <div id="bigbox">
+        <h2>登录界面</h2>
+        <form class="inputbox" action="" method="POST" style="margin-top: 15px">
+            {% csrf_token %}
+            {% for i in login_form %}
+                <!-- <label for="{{ i.id_for_label }}">{{ i.label }}</label> -->
+                <div class="inputtext">
+                    {{ i }}
+                </div>
+                <p class="text-danger">{{ i.errors.as_text }}</p>
+            {% endfor %}
+            <a href="{% url 'forget_pwd' %}?from={{request.get_full_path}}" style="display: inline-block; ">忘记密码？</a>
+            <span id="tip" class="text-danger" style="display: block;">{{login_form.non_field_errors }}</span>
+            <table class="buttonwrap">
+                <td style="padding:0 10px">
+                    <input type="submit" class="inputbutton button-login" value="登录" style="width: 100%">
+                </td>
+                <td style="padding:0 10px">
+                    <a  class="inputbutton button-register"  href="{% url 'user_register' %}" style="text-decoration: none;display: block;width: 100%;padding-top: 2px">注册</a>
+                </td>
+                <td style="padding:0 10px">
+                    <a  class="inputbutton tourist"  href="{% url 'tour_index' %}"style="text-decoration: none;display: block;width: 100%;padding-top: 2px">
+                        游客
+                    </a>
+                </td>
+            </table>
+        </form>
+    </div>
+    {% else %}
+        <div class="row" style="text-align: center;">
+                <h1>你登录过了</h1>
+                <script type="text/javascript">
+                    function gun(){
+                        window.location.href = '/';
+                    }
+                    setTimeout("gun()",1000 );
+                </script>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
