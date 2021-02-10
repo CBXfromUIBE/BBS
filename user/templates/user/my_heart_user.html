@@ -26,7 +26,7 @@
                                 <th><button class="btn btn-primary" onclick="window.location.href='{{return_back_url}}'">返回</button></th>
                                 <th>用户</th>
                                 <th>查看ta的帖子</th>
-                                <th>私信</th>
+                                <!-- <th>私信</th> -->
                                 <th>取关</th>
                             </tr>
                         </thead>
@@ -41,7 +41,7 @@
                                         用户:{{heart_user.content_object.username }}
                                     {% endif %}</td>
                                 <td><a href="{% url 'get_ta_tiezi_all'  heart_user.content_object.id %}">查看</a></td>
-                                <td id="test">私信</td>
+                                <!-- <td id="test">私信</td> -->
                                 <td><a href="{% url 'cancel_heart' heart_user.content_object.id %}?from={{request.get_full_path}}">取关</a></td>
                             </tr>
                             {% empty %}
@@ -51,7 +51,7 @@
                                 <td>#</td>
                                 <td>#</td>
                                 <td>#</td>
-                                <td>#</td>
+                                <!-- <td>#</td> -->
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -96,7 +96,7 @@
                                 用户:{{heart_user.content_object.username }}
                             {% endif %}
                         </h4>
-                        <a class="btn btn-primary" style="position: absolute;right: 11%;top: 11%;">私信</a>
+                        <!-- <a class="btn btn-primary" style="position: absolute;right: 11%;top: 11%;">私信</a> -->
                     </li>
                     {% empty %}
                     <li class="list-group-item">你没有关注任何人</li>
@@ -119,27 +119,39 @@
                 </div>
             </div>
         </div>
-        <!-- 发帖区域 -->
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-sx-10 col-sx-offset-1">
-                <hr>
-                <h2 style="text-align: center;">自己发帖子</h2>
-                <form id="tiezi_form" action="{% url 'update_tiezi' %}" method="POST" style="overflow:hidden" name="tiezi"> 
-                    <input type="hidden" name='author' value="{{user}}">
-                    {% csrf_token %}
-                    {% for field in tiezi_form %}
-                        <div class="form-group {{ field.id_for_label }}">
-                            <label for="{{ field.id_for_label }}">
-                                {{ field.label }}
-                            </label>
-                            {{ field }}
-                        </div>
-                    {% endfor %}
-                    <span id="tiezi_error" class="text-danger pull-left"></span>
-                    <input type="submit" class="btn btn-primary btn-lg btn-block" value="发帖">
-                </form>
+            <!-- 发帖区域 -->
+            {% if user.custom_user.is_UIBEr %}
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-sx-10 col-sx-offset-1">
+                    <hr>
+                    <h2 style="text-align: center;">自己发帖子</h2>
+                    <form id="tiezi_form" action="{% url 'update_tiezi' %}" method="POST" style="overflow:hidden" name="tiezi"> 
+                        <input type="hidden" name='author' value="{{user}}">
+                        {% csrf_token %}
+                        {% for field in tiezi_form %}
+                            <div class="form-group {{ field.id_for_label }}">
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <span id="tiezi_error" class="text-danger pull-left"></span>
+                        <input type="submit" class="btn btn-primary btn-lg btn-block" value="发帖">
+                    </form>
+                </div>
             </div>
-        </div>
+            {% else %}
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-sx-10 col-sx-offset-1">
+                    <hr>
+                    <h4 style="text-align: center;">账号经认证后才可以评论</h4>
+                    <p>联系管理员提供相关认证材料</p>
+                    <p>管理员邮箱：201701056@uibe.edu.cn</p>
+                    <p>管理员微信：CBX_2323</p>  
+                </div>
+            </div>
+            {% endif %}
         
         {%else%}
         <div class="row">

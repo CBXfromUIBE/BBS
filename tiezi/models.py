@@ -14,12 +14,12 @@ class TieZi_Label(models.Model):
 
 class TieZi(models.Model,ReadNumExpandMethod):
     title = models.CharField(u'帖子标题', max_length=40, help_text='不超过40个字符')
-    tiezi_label = models.ForeignKey(TieZi_Label, on_delete=models.CASCADE)
+    tiezi_label = models.ForeignKey(TieZi_Label, on_delete=models.CASCADE,blank=True)
     content = RichTextUploadingField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     read_detail = GenericRelation(ReadDetail)
-    created_time = models.DateTimeField(auto_now_add=True)
-    last_altered_time = models.DateTimeField(auto_now=True)
+    created_time = models.DateTimeField(auto_now_add=True,blank=True)
+    last_altered_time = models.DateTimeField(auto_now=True,blank=True)
     
     
     def __str__(self):

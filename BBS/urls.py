@@ -22,7 +22,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('',views.index, name='index'),
-    path('tour_index',views.tour_index, name='tour_index'),
     path('admin/', admin.site.urls),
     path('tiezi/', include('tiezi.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),

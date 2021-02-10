@@ -158,23 +158,30 @@
 <div class="row" style="border:medium dashed #43A047;border-radius: 20px;padding-bottom: 5px">
         <div class="col-xs-12 col-sm-12 col-md-12" style="margin-left: 0;">
             {% if user.is_authenticated %}
-            <form id="comment_form" action="{% url 'update_comment' %}" method="POST" style="overflow:hidden" name="comment">
-                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-                    <legend>{{user.username}},欢迎评论</legend>
-                </fieldset>
-                <div id="reply_content_container" style="display:none;">
-                    <p>回复：</p>
-                    <div id="reply_content"></div>
-                </div>
-                {% csrf_token %}                            
-                {% for field in comment_form %}
-                    {{ field }}
-                {% endfor %}
-                <span id="comment_error" class="text-danger pull-left"></span>
-                    <input type="hidden" name='object_id' value="{{tiezi.id}}">
-                    <input type="hidden" name='content_type' value="tiezi">
-                    <input type="submit" class="layui-btn layui-btn-fluid" value="回帖">
-                </form>
+                {% if user.custom_user.is_UIBEr %}
+                <form id="comment_form" action="{% url 'update_comment' %}" method="POST" style="overflow:hidden" name="comment">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                        <legend>{{user.username}},欢迎评论</legend>
+                    </fieldset>
+                    <div id="reply_content_container" style="display:none;">
+                        <p>回复：</p>
+                        <div id="reply_content"></div>
+                    </div>
+                    {% csrf_token %}                            
+                    {% for field in comment_form %}
+                        {{ field }}
+                    {% endfor %}
+                    <span id="comment_error" class="text-danger pull-left"></span>
+                        <input type="hidden" name='object_id' value="{{tiezi.id}}">
+                        <input type="hidden" name='content_type' value="tiezi">
+                        <input type="submit" class="layui-btn layui-btn-fluid" value="回帖">
+                    </form>
+                {% else %}
+                <h4>账号经认证后才可以评论</h4>
+                <p>联系管理员提供相关认证材料</p>
+                <p>管理员邮箱：201701056@uibe.edu.cn</p>
+                <p>管理员微信：CBX_2323</p>   
+                {% endif %}             
             {% else %}
                 <h4>登录后才可以评论</h4>
                 <a href="{% url 'user_login' %}?from={{request.get_full_path}}" class="layui-btn layui-btn-radius"style="text-decoration: none;">登录</a>
