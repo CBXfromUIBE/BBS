@@ -50,7 +50,13 @@ def user_register(request):
             is_UIBEr = True
             username = reg_form.cleaned_data['username']
             password = reg_form.cleaned_data['password']
-            email = request.POST.get('email')
+            email = ''
+            guanyou = request.POST.get('guanyou')
+            feiguanyou = request.POST.get('feiguanyou')
+            if guanyou:
+                email = request.POST.get('email1')
+            if feiguanyou:
+                email = request.POST.get('email2')
             if email.strip() == '':
                 new_reg_form = RegForm()
                 context = {}

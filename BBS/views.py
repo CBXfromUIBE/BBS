@@ -16,10 +16,19 @@ from feedback.models import LikeCount,LikeRecord,disLikeCount,disLikeRecord
 
 def get_newest_tiezi():
     x = TieZi.objects.all()
+    num = x.count()
     true_list = []
-    for i in range(10):
-        true_list.append(x[i])
-    return true_list
+    if num < 10:
+        if num == 0:
+            return true_list
+        else:
+            for i in range(num):
+                true_list.append(x[i])
+        return true_list
+    else:
+        for i in range(10):
+                true_list.append(x[i])
+        return true_list  
 
 #按时期归档，还未用到
 def time_statistic():
@@ -36,15 +45,18 @@ def get_hotest_tiezi():
 
 def get_suckest_tiezi():
     tiezi_all = TieZi.objects.all()
-    content_type = ContentType.objects.get_for_model(tiezi_all[0])
     tiezi_all_count = tiezi_all.count()
     suckest_tiezi_list = []
+    if tiezi_all_count == 0:
+        return suckest_tiezi_list
+    content_type = ContentType.objects.get_for_model(tiezi_all[0])
     for i in range(tiezi_all_count):
         a_dic = {}
         object_id = tiezi_all[i].id
-        dislike_count,created = disLikeCount.objects \
-                    .get_or_create(content_type=content_type,object_id=object_id)
-        a_dic['tiezi'] = tiezi_all[i]
+        dislike_count,created = disLikeCount.objects.get_or_create(content_type=content_type,object_id=object_id)
+        a_dic['tiezi_title'] = tiezi_all[i].title
+        a_dic['tiezi_content'] = tiezi_all[i].content
+        a_dic['tiezi_id'] = tiezi_all[i].id
         a_dic['dislikecount'] = dislike_count.disliked_num
         if i == 0:
             suckest_tiezi_list.append(a_dic)
@@ -109,7 +121,7 @@ def index(request):
     context = {}
     context['hotest_tiezi'] = get_hotest_tiezi()   
     #context['today_read_num'] = today_read_num 未用到
-    context['suckest_tiezi'] = suckest_tiezi
+    context['suckest_tiezi'] = get_suckest_tiezi()
     context['newest_tiezi'] = get_newest_tiezi()
     context['tiezi_all']  = TieZi.objects.all()
     return render(request, 'index.html', context)

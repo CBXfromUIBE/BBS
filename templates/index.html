@@ -146,15 +146,16 @@
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
             <h2 style="text-align: center;color: #2196F3">垃圾的帖子</h2>
-            {% for i in tiezi_all %}
+            {% for i in suckest_tiezi %}
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        <a href="{% url 'tiezi_detail' i.id %}">{{ i.title }}</a>
+                        <a href="{% url 'tiezi_detail' i.tiezi_id %}">{{ i.tiezi_title }}</a>
+                        <span>({{i.dislikecount}}人觉得很淦)</span>
                     </h3>
                 </div>
                 <div class="panel-body">
-                {{ i.content |striptags|safe|truncatechars:35|linebreaks }}
+                {{ i.tiezi_content |striptags|safe|truncatechars:35|linebreaks }}
                 </div>
             </div>
             {% empty%}
@@ -165,10 +166,10 @@
 
     <!-- 跳蚤市场 -->
     <div class="jumbotron" style="text-align:center">
-        <h1>跳蚤市场</h1>
+        <h1>跳蚤市场(不定期推出)</h1>
         <p class="lead">二手书，二手日用品，拼课，学习资料交易都可以在这里进行信息发布。</p>
         <p><a class="btn btn-lg btn-success" href="" role="
-            button">去看看</a></p>
+            button">等等看</a></p>
     </div>
 </div>
 

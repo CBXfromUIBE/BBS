@@ -59,7 +59,8 @@
                     {{i}}
                 <p class="text-danger">{{ field.errors.as_text }}</p>
                 {% endfor %}
-                <input type="text" id="email2" placeholder="请输入邮箱" class="inputtext" style="margin-bottom: 10px" name="email">
+                <input type="text" id="email2" placeholder="请输入邮箱" class="inputtext" style="margin-bottom: 10px" name="email2">
+                <input type="hidden" name='feiguanyou' value="feiguanyou">
                 <p id="tip3" class="text-danger"></p>
                 <span  class="text-danger" style="display: block;">{{reg_form.non_field_errors }}
                 </span>
@@ -83,7 +84,8 @@
                     {{i}}
                 <p class="text-danger">{{ i.errors.as_text }}</p>
                 {% endfor %}
-                <input type="text" id="email1" placeholder="请输入邮箱,格式xxx@uibe.edu.cn" class="inputtext" style="margin-bottom: 10px" name="email">
+                <input type="text" id="email1" placeholder="请输入邮箱,格式xxx@uibe.edu.cn" class="inputtext" style="margin-bottom: 10px" name="email1">
+                <input type="hidden" name='guanyou' value="guanyou">
 
                 <div class="send_code">
                     <input type="text" id="ver_code" placeholder="请输入验证码"   name="ver_code" class="ver_code">
